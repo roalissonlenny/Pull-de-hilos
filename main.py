@@ -3,45 +3,64 @@ import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
 
-logging.basicConfig(level=logging.DEBUG, format='%(threadname)s: %(message)s')
+logging.basicConfig(level=logging.DEBUG, format='%(threadName)s: %(message)s') #Tiempo de ejecución de hilo por hilo, es informativo (DEBUG)
 
 
-print("----------------------------")
+print("--------------------------------------------")
 print("Dos hilos")
 
+
 globalArrayNum = []
-def contador2 ( inicio, fin ):
-    logging.info(f'funcion con rango: {inicio} - {fin}')
+def contadorDos( inicio, fin ):
+    logging.info(f'Función con rango: {inicio} - {fin}') 
     for i in range (inicio, fin+1, 1):
-        globalArrayNum.append(i)
+        globalArrayNum.append( i )
         time.sleep(0.01)
     return 0
 
-t0=time.time()
+
+
+t0 = time.time()
 listaHilos = []
-t = threading.Thread(target=contador2, args=(1,50))
+t = threading.Thread(target=contadorDos, args=(1,50))
 listaHilos.append(t)
 t.start()
-t = threading.Thread(target=contador2, args=(51,100))
+t = threading.Thread(target=contadorDos, args=(51,100))
 listaHilos.append(t)
 t.start()
 
 for t in listaHilos:
     t.join()
-tf=time.time()-t0
-
+tf = time.time()-t0
 
 globalArrayNum.sort()
-print(f'tiempo de ejecucion: {tf}')
+print(f"Tiempo de ejecución: {tf}")
 print(globalArrayNum)
 
 
-print("----------------------------")
-print("Pool de hilos")
+print("---------------------------")
+print("Pool de Hilos")
+
+def printHW():
+    logging.info(f'Función HW') #información de que hilo está ejecutando 
+    print(" Hola Mundo :) ")
 
 globalArrayNum = []
 with ThreadPoolExecutor( max_workers=2 ) as executor:
-    executor.submit(contador2, 1,50)
-    executor.submit(contador2, 51,100)
+    #executor.submit(contadorDos, 1,50)
+    #executor.submit(contadorDos, 51,100)
+    #executor.submit(contadorDos, 101,150)
+    #executor.submit(contadorDos, 151,200)
+    #executor.submit(printHW)
+    for i in range(1,201,50):
+        executor.submit(contadorDos, i,i+49)
 
+
+
+t0 = time.time() 
+
+globalArrayNum.sort()
+print(f"Tiempo de ejecución: {tf}")
 print(globalArrayNum)
+
+###############
